@@ -31,30 +31,32 @@ def entropia(df_dados:pd.DataFrame, nom_col_classe:str) -> float:
 
 def ganho_informacao_condicional(df_dados: pd.DataFrame, val_entropia_y:float, nom_col_classe:str, nom_atributo:str, val_atributo:Union[int,float,str,bool]) ->float:
     """
-    Calcula o GI(Y|nom_atributo=val_atributo), ou seja,
-    calcula o ganho de informação do atributo 'nom_atributo' quando ele assume o valor 'val_atributo'.
-    O valor de Entropia(Y) já foi calculado e está armazenado em val_entropia_y.
-    Dica: A entropia condicional pode ser calculada filtrando o DataFrame df_dados.
+        Calcula o GI(Y|nom_atributo=val_atributo), ou seja,
+        calcula o ganho de informação do atributo 'nom_atributo' quando ele assume o valor 'val_atributo'.
+        O valor de Entropia(Y) já foi calculado e está armazenado em val_entropia_y.
+        Dica: A entropia condicional pode ser calculada filtrando o DataFrame df_dados.
 
-    df_dados: Dataframe com os dados a serem analisados.
-    val_entropia_y: Entropia(Y) (ver slides)
-    nom_col_classe: nome da coluna que representa a classe
-    nom_atributo: atributo a ser calculado o ganho de informação
-    val_atributo: valor do atributo a ser considerado para este calculo. Uso do Union na dia do tipo: 
-                  o valor pode ser qualquer tipo primitivo (boolean, int, float ou str)
+        df_dados: Dataframe com os dados a serem analisados.
+        val_entropia_y: Entropia(Y) (ver slides)
+        nom_col_classe: nome da coluna que representa a classe
+        nom_atributo: atributo a ser calculado o ganho de informação
+        val_atributo: valor do atributo a ser considerado para este calculo. Uso do Union na dia do tipo: 
+                    o valor pode ser qualquer tipo primitivo (boolean, int, float ou str)
     """
-    #substitua os "None"/0 quando necessario para completar o código
-    #.em df_dados_filtrado, filtre o df_dados da forma correta - pensando quais
-    #elementos considerar na entropia condicional Entropia(Y|nom_atributo=val_atributo).
-    df_dados_filtrado = None
 
-    #use df_dados_filtrado para obter o valor de Entropia(Y|nom_atributo=val_atributo)
-    val_ent_condicional = 0
-    #use val_ent_condicional para calcular o GI(Y|nom_atributo=val_atributo)
-    val_gi = 0
+    # substitua os "None"/0 quando necessario para completar o código
+    # .em df_dados_filtrado, filtre o df_dados da forma correta - pensando quais
+    # elementos considerar na entropia condicional Entropia(Y|nom_atributo=val_atributo).
+    df_dados_filtrado = df_dados[df_dados[nom_atributo] == val_atributo]
 
-    #para testes:
-    #print(f"GI({nom_col_classe}| {nom_atributo}={val_atributo}) = {val_gi}")
+    # use df_dados_filtrado para obter o valor de Entropia(Y|nom_atributo=val_atributo)
+    val_ent_condicional = entropia(df_dados_filtrado, nom_col_classe)
+
+    # use val_ent_condicional para calcular o GI(Y|nom_atributo=val_atributo)
+    val_gi = val_entropia_y - val_ent_condicional
+
+    # para testes:
+    # print(f"GI({nom_col_classe}| {nom_atributo}={val_atributo}) = {val_gi}")
 
     return val_gi
 
