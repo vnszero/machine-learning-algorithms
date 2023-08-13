@@ -70,23 +70,23 @@ def ganho_informacao(df_dados:pd.DataFrame, nom_col_classe:str, nom_atributo:str
         nom_atributo: atributo a ser calculado o ganho de informação
         val_atributo: valor do atributo a ser considerado para este calculo
     """
-    #Muito similar ao codigo da entropia, mas aqui você deverá navegar sobre
-    #os possiveis valores do atributo nom_atributo para calcular o infoGain
-    #(usando a função ganho_informacao_condicional)
-    #substitua os "None"/0 quando necessario para completar o código
+    # Muito similar ao codigo da entropia, mas aqui você deverá navegar sobre
+    # os possiveis valores do atributo nom_atributo para calcular o infoGain
+    # (usando a função ganho_informacao_condicional)
+    # substitua os "None"/0 quando necessario para completar o código
 
-    #atenção nessa linha abaixo, qual é o valor que temos que colocar em None?
-    #o que precisamos contabilizar dessa vez?
-    ser_count_col = df_dados[None].value_counts()
+    # atenção nessa linha abaixo, qual é o valor que temos que colocar em None?
+    # o que precisamos contabilizar dessa vez?
+    ser_count_col = df_dados[nom_atributo].value_counts()
 
-    val_entropia_y = None
+    val_entropia_y = entropia(df_dados, nom_col_classe)
 
     num_total = len(df_dados)
     val_info_gain = 0
-    for val_atr,count_atr in None:
-        val_prob = None
-        val_info_gain += None
+    for val_atr, count_atr in ser_count_col.items():
+        val_prob = count_atr / num_total 
+        val_info_gain += val_prob * ganho_informacao_condicional(df_dados, val_entropia_y, nom_col_classe, nom_atributo, val_atr)
 
-        #print(f"GI({nom_col_classe}| {nom_atributo}={val_atr}) = {val_info_gain}")
+        # print(f"GI({nom_col_classe}| {nom_atributo}={val_atr}) = {val_info_gain}")
 
     return val_info_gain
