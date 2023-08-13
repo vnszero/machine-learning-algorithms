@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 from typing import Union
 
 
@@ -10,19 +11,21 @@ def entropia(df_dados:pd.DataFrame, nom_col_classe:str) -> float:
         df_dados: Dados a serem considerados para o calculo da entropia
         nom_col_classe: nome da coluna (em df_dados) que representa a classe
     """
-    #substitua os None/0 quando necessario para completar o código
-    #ser_count_col armazena, para cada valor da classe, a sua quantidade
-    ser_count_col = df_dados[nom_col_classe].value_counts()
+    # substitua os None/0 quando necessario para completar o código
+    # ser_count_col armazena, para cada valor da classe, a sua quantidade
+
+    ser_count_col = df_dados[nom_col_classe].value_counts() 
+        # value_counts eetorna uma Serie contendo contagem de valores únicos, portanto nao podemos usar iteritems
     num_total = len(df_dados)
     entropia = 0
 
-    #Navege em ser_count_col para fazer o calculo da entropia
-    for val_atr,count_atr in ser_count_col.iteritems():
-        #altere os valores de val_prob e entropia para o calculo correto da mesma
-        #val_prob deverá ser a proporção de instancias de uma determinada classe
-        #caso tenha duvida sobre o iteritems e value_counts, consulte o passo a passo do pandas
-        val_prob = None
-        entropia += None
+    # Navege em ser_count_col para fazer o calculo da entropia
+    for val_atr, count_atr in ser_count_col.items():
+        # altere os valores de val_prob e entropia para o calculo correto da mesma
+        # val_prob deverá ser a proporção de instancias de uma determinada classe
+        # caso tenha duvida sobre o iteritems e value_counts, consulte o passo a passo do pandas
+        val_prob = count_atr / num_total
+        entropia += math.log(val_prob, 2) * val_prob * -1
     return entropia
 
 
