@@ -1,0 +1,2 @@
+1. Está dando problema para instalar os requirements.txt (generating metadata)
+2. Atvidade básico-pandas há comentários demonstrando os erros
