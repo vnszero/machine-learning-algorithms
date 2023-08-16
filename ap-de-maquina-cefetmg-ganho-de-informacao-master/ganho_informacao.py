@@ -90,3 +90,36 @@ def ganho_informacao(df_dados:pd.DataFrame, nom_col_classe:str, nom_atributo:str
         # print(f"GI({nom_col_classe}| {nom_atributo}={val_atr}) = {val_info_gain}")
 
     return val_info_gain
+
+def ganho_informacao_discreto(df_dados:pd.DataFrame, nom_col_classe:str, nom_atributo:str) -> float:
+    """
+        Calcula GI(Y| nom_atributo), ou seja, o ganho de informação do atributo nom_atributo.
+
+        df_dados: DataFrame com os dados a serem analisados.
+        nom_col_classe: nome da coluna que representa a classe
+        nom_atributo: atributo a ser calculado o ganho de informação
+        val_atributo: valor do atributo a ser considerado para este calculo
+    """
+    # Muito similar ao codigo da entropia, mas aqui você deverá navegar sobre
+    # os possiveis valores do atributo nom_atributo para calcular o infoGain
+    # (usando a função ganho_informacao_condicional)
+    # substitua os "None"/0 quando necessario para completar o código
+
+    # atenção nessa linha abaixo, qual é o valor que temos que colocar em None?
+    # o que precisamos contabilizar dessa vez?
+
+    # Assumindo que nom_atributo é um atributo contínuo e preciasa ser discretizado
+    num_bins = 5  # Número de intervalos para discretização
+    
+    # Discretiza o atributo em num_bins intervalos usando a função cut do pandas
+    df_dados['discretized_atributo'] = pd.cut(df_dados[nom_atributo], bins=num_bins)
+    
+    val_entropia_y = entropia(df_dados, nom_col_classe)
+    num_total = len(df_dados)
+    val_info_gain = 0
+    
+    for val_bin in df_dados['discretized_atributo'].unique():
+        val_prob = len(df_dados[df_dados['discretized_atributo'] == val_bin]) / num_total
+        val_info_gain += val_prob * ganho_informacao_condicional(df_dados, val_entropia_y, nom_col_classe, 'discretized_atributo', val_bin)
+
+    return val_info_gain
