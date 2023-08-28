@@ -36,6 +36,34 @@ def divide_treino_teste(df:pd.DataFrame, val_proporcao_treino:float) -> Tuple[pd
 
     return df_treino,df_teste
 
+def divide_treino_validacao_teste(df:pd.DataFrame, val_proporcao_treino:float, val_proporcao_validacao:float) -> Tuple[pd.DataFrame,pd.DataFrame]:
+    """
+        A partir do DataFrame df, faz a divisão entre treino, validacao e teste obedecendo a proporção val_proporcao_treino.
+        Essa proporção é um valor de 0 a 1, sendo que 1 representa 100%.
+
+        Retorna uma tupla com o treino e teste separados
+    """
+    
+    #1. obtenha o treino usando o método sample do DataFrame
+    df_treino = df.sample(frac=val_proporcao_treino, random_state=1)
+
+    #2. encontrar nova proporcao em relacao ao que sobra
+    new_val_proporcao_validacao = (val_proporcao_validacao)/(1-val_proporcao_treino)
+
+    #3. grupo que sobra
+    df_group =  df.drop(df_treino.index)
+
+    #4. encontrar o novo grupo de validacao
+    df_validacao = df_group.sample(frac=new_val_proporcao_validacao, random_state=1)
+
+    #5. encontrar df de teste
+    df_teste = df_group.drop(df_validacao.index)
+
+    #obtenha os valores de treino, validacao e teste
+    #df_treino, df_validacao, df_teste = np.split(df.sample(frac=val_proporcao_treino, random_state=1), [int(val_proporcao_treino*len(df)), int((val_proporcao_validacao + val_proporcao_treino)*len(df))])
+
+    return df_treino, df_validacao, df_teste
+
 
 
 def faz_classificacao(x_treino:pd.DataFrame, y_treino:pd.Series, x_teste:pd.DataFrame, y_teste:pd.Series, min_samples_split:float) -> Tuple[List[float],float]:
@@ -96,5 +124,7 @@ def plot_performance_min_samples(X_treino,y_treino,X_teste,y_teste):
         arr_min_samples.append(min_samples)
 
     #plota o resultado
-    plt.plot(arr_min_samples,arr_ac_treino,"b--")
-    plt.plot(arr_min_samples,arr_ac_teste,"r-")
+    plt.plot(arr_min_samples,arr_ac_treino,"b--", label='Treino')
+    plt.plot(arr_min_samples,arr_ac_teste,"r-",label='Teste')
+    plt.legend()
+
