@@ -1,0 +1,1 @@
+1. A execução da função print para exibir a acurácia está quebrada, logo após a execução do test_faz_classificacao
