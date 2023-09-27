@@ -138,7 +138,7 @@ class Camada():
         Atividade 2: Inicialize o vetor de arr_unidades com a unidade correspondete
         """
         for i in range(qtd_unidades):
-            self.arr_unidades.append(None)
+            self.arr_unidades.append(Unidade(func_ativacao,func_dz))
 
 
 
