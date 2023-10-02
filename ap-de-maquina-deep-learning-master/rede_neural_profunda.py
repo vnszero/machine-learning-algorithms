@@ -254,19 +254,19 @@ class RedeNeural():
         for camada_l,qtd_unidades in enumerate(self.arr_qtd_un_por_camada):
             #por meio de arr_func_a_por_camada defina a dz_função que será usada
             #..caso seja a ultima camada, será usada a dz_ultima camada
-            dz_funcao = None if(camada_l<len(self.arr_qtd_un_por_camada)-1) else None
+            dz_funcao = self.arr_func_a_por_camada[camada_l].dz_funcao if(camada_l<len(self.arr_qtd_un_por_camada)-1) else self.arr_func_a_por_camada[camada_l].dz_ultima_camada
             #instancie a camda
-            obj_camada = None
+            obj_camada = Camada(qtd_unidades,self.arr_func_a_por_camada[camada_l].funcao,dz_funcao)
             self.arr_camadas.append(obj_camada)
 
             #armazena a camada anterior
             if(camada_l>0):
-                obj_camada.ant_camada = None
+                obj_camada.ant_camada = self.arr_camadas[camada_l-1]
 
         #para cada camada até a penultima, armazene em camada.prox_camada a camada seguinte
         for l,camada in enumerate(self.arr_camadas):
             if(l<len(self.arr_camadas)-1):
-                camada.prox_camada = None
+                camada.prox_camada = self.arr_camadas[l+1]
 
     def forward_propagation(self):
         """
