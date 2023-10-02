@@ -61,7 +61,6 @@ class Unidade():
 
         #deixar as linhas de baixo como none, nao foi calculado ainda
 
-
         self.arr_w = None
         self.arr_z = None
         self.arr_a = None
@@ -116,10 +115,9 @@ class Unidade():
         self.gradiente = Gradiente(arr_dz,arr_dw,db)
 
         return self.gradiente
+    
     def loss_function(self,arr_y):
         return np.sum(-(arr_y*np.log(self.arr_a)+(1-arr_y)*np.log(1-self.arr_a)))/len(arr_y)
-
-
 
     def atualiza_pesos(self,learning_rate):
         self.arr_w = self.arr_w-learning_rate*self.gradiente.arr_dw
@@ -139,8 +137,6 @@ class Camada():
         """
         for i in range(qtd_unidades):
             self.arr_unidades.append(Unidade(func_ativacao,func_dz))
-
-
 
     def forward_propagation(self,mat_a_ant):
         """
@@ -175,12 +171,12 @@ class Camada():
         """
         #inicialize com zero a matriz
         #de acordo com as suas dimensoes
-        _mat_w = None
+        _mat_w = np.zeros((len(self.arr_unidades), self.qtd_un_camada_ant))
 
         #para cada unidade, preencha corretamente os valores da matriz
         #usando o vetor de pesos de cada unidade
         for i,unidade in enumerate(self.arr_unidades):
-            _mat_w[None,None] = None
+            _mat_w[i, : ] = unidade.arr_w
 
         return _mat_w
 
@@ -191,11 +187,11 @@ class Camada():
         Verifique as dimensões da matriz (preencha os None)
         """
         #inicialize com zero a matriz
-        _mat_dz = None
+        _mat_dz = np.zeros((self.mat_a.shape[0], len(self.arr_unidades)))
 
         #para cada unidade, preencha corretamente os valores da matriz
         for i,unidade in enumerate(self.arr_unidades):
-            _mat_dz[None,None] = None
+            _mat_dz[ : , i] = unidade.gradiente.arr_dz
 
         return _mat_dz
 
@@ -205,7 +201,7 @@ class Camada():
         Realiza o calculo do produto entre mat_dz e mat_w
         chame as propriedades correspondentes
         """
-        return None
+        return np.dot(self.mat_dz,self.mat_w)
 
     def backward_propagation(self,arr_y):
         """
