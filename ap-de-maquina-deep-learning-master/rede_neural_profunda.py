@@ -149,11 +149,11 @@ class Camada():
         """
         #obtenha a quantidade de unidades na camada anterior  por meio de mat_a_ant
         #..pense nas dimensões da matriz
-        self.qtd_un_camada_ant = None
+        self.qtd_un_camada_ant = mat_a_ant.shape[1]
 
         #Inicialize com zeros a matriz de ativacao da camada atual
         #..Novamente, verifique as dimensões da matriz
-        self.mat_a = None
+        self.mat_a = np.zeros((mat_a_ant.shape[0],len(self.arr_unidades)))
 
         #print("MAT A:"+str(self.mat_a.shape))
         #print("MAT_A_ANT: "+str(mat_a_ant))
@@ -161,7 +161,8 @@ class Camada():
         #...o forward_propagation da unidade retorna um vetor arr_a com as ativações
         #... por instancia. Você deve armazenar os valores corretamente na matriz mat_a (veja especificação)
         for i,unidade in enumerate(self.arr_unidades):
-            None
+            arr_a = unidade.forward_propagation(mat_a_ant)
+            self.mat_a[:,i] = arr_a
 
         return self.mat_a
 
