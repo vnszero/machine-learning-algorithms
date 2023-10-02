@@ -273,7 +273,12 @@ class RedeNeural():
         Atividade 7: Execute, para todas as camadas, o método forward_propagation.
         """
         num_camadas = len(self.arr_camadas)
-
+        for i in range(num_camadas):
+            if(i==0):
+                mat_a_ant = self.mat_x
+            else:
+                mat_a_ant = self.arr_camadas[i-1].mat_a
+            self.arr_camadas[i].forward_propagation(mat_a_ant)
 
     def backward_propagation(self):
         """
