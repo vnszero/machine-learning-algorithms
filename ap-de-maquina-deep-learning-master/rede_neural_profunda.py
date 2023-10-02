@@ -285,6 +285,8 @@ class RedeNeural():
         Atividade 8: Execute, para todas as camadas, o método backward_propagation. Fique atento na ordem de execução
         """
         num_camadas = len(self.arr_camadas)
+        for i in range(num_camadas-1,-1,-1):
+            self.arr_camadas[i].backward_propagation(self.arr_y)
 
 
     def atualiza_pesos(self,learning_rate):
