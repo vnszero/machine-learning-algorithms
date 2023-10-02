@@ -306,13 +306,15 @@ class RedeNeural():
         self.config_rede(mat_x,arr_y)
 
         for i in range(self.num_iteracoes):
-            #faça a qui a execução desta iteração
-
+            #faça aqui a execução desta iteração
+            self.forward_propagation()
+            self.backward_propagation()
             #print("A: "+str(self.arr_camadas[0].arr_unidades[0].arr_a))
             #print("Y:"+str(arr_y))
             if(i % 100 == 0):
                 loss = self.loss_function(arr_y)
                 print("Iteração: "+str(i)+" Loss: "+str(loss))
+            self.atualiza_pesos(learning_rate)
 
 
 
@@ -323,8 +325,7 @@ class RedeNeural():
         #Para calcular o loss_function, voce deverá obter o vetor de
         #..ativações (arr_a) apropriado. Fique atento com qual camada/unidade você deverá
         #..obter o arr_a. Preencha os None com o valor apropriado
-
-        arr_a = self.arr_camadas[None].arr_unidades[None].arr_a
+        arr_a = self.arr_camadas[0].arr_unidades[0].arr_a
         #print("ARRAY Y: "+str(arr_y))
         #print("ARRAY A: "+str(arr_a))
 
@@ -342,6 +343,6 @@ class RedeNeural():
         self.forward_propagation()
 
         #print(self.arr_a)
-        arr_a = self.arr_camadas[None].arr_unidades[None].arr_a
+        arr_a = self.arr_camadas[-1].arr_unidades[-1].arr_a
 
-        return None
+        return arr_a > 0.5
