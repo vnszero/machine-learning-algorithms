@@ -209,17 +209,18 @@ class Camada():
         """
         #obtenha o mat_dz_w da proxima camada
         #..Caso não exista proxima camada, mat_dz_w_prox permanecerá None
-        mat_dz_w_prox = None
+        mat_dz_w_prox = None if(self.prox_camada is None) else self.prox_camada.mat_dz_w
 
         for i,unidade in enumerate(self.arr_unidades):
             #Caso exista mat_dz_w_prox, obtenha o arr_dz_w_prox
             #..correspondente a esta unidade. Para isso, fique atento a dimensão de mat_dz_w_prox
-            arr_dz_w_prox =  None
+            if mat_dz_w_prox is not None:
+                arr_dz_w_prox =  mat_dz_w_prox[ : , i]
+            else:
+                arr_dz_w_prox = None
 
             #chame o backwrd_propagation desta unidade
-            None
-
-
+            unidade.backward_propagation(arr_y,arr_dz_w_prox)
 
     def atualiza_pesos(self,learning_rate):
         """
