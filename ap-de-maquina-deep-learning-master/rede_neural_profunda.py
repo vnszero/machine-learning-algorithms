@@ -1,6 +1,7 @@
 from abc import abstractmethod
 import numpy as np
 import math
+        
 class Gradiente():
     def __init__(self,arr_dz,arr_dw,db):
         self.arr_dz = arr_dz
@@ -309,10 +310,10 @@ class RedeNeural():
             #faça aqui a execução desta iteração
             self.forward_propagation()
             self.backward_propagation()
-            #print("A: "+str(self.arr_camadas[0].arr_unidades[0].arr_a))
+            # print("A: "+str(self.arr_camadas[0].arr_unidades[0].arr_a))
             #print("Y:"+str(arr_y))
             if(i % 100 == 0):
-                loss = self.loss_function(arr_y)
+                loss = self.loss_function(self.arr_y)
                 print("Iteração: "+str(i)+" Loss: "+str(loss))
             self.atualiza_pesos(learning_rate)
 
@@ -326,6 +327,7 @@ class RedeNeural():
         #..ativações (arr_a) apropriado. Fique atento com qual camada/unidade você deverá
         #..obter o arr_a. Preencha os None com o valor apropriado
         arr_a = self.arr_camadas[0].arr_unidades[0].arr_a
+        
         #print("ARRAY Y: "+str(arr_y))
         #print("ARRAY A: "+str(arr_a))
 
