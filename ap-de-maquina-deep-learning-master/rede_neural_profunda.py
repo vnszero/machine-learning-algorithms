@@ -38,9 +38,8 @@ leaky_relu = FuncaoAtivacao(lambda z: np.maximum(0.01*z,z),
                       )
 
 
-tanh = FuncaoAtivacao(lambda z: (np.exp(z)-np.exp(-z))/(np.exp(z)+np.exp(-z)),
-                      lambda a,z,y,arr_dz_w_prox: 1 - np.tanh(np.power(a,2)),
-                      )
+tanh = FuncaoAtivacao(lambda z: np.tanh(z),
+                      lambda a,z,y,arr_dz_w_prox: 1 - np.power(np.tanh(z),2),                      )
 
 
 
@@ -326,7 +325,7 @@ class RedeNeural():
         #Para calcular o loss_function, voce deverá obter o vetor de
         #..ativações (arr_a) apropriado. Fique atento com qual camada/unidade você deverá
         #..obter o arr_a. Preencha os None com o valor apropriado
-        arr_a = self.arr_camadas[0].arr_unidades[0].arr_a
+        arr_a = self.arr_camadas[-1].arr_unidades[0].arr_a
         
         #print("ARRAY Y: "+str(arr_y))
         #print("ARRAY A: "+str(arr_a))
@@ -345,6 +344,6 @@ class RedeNeural():
         self.forward_propagation()
 
         #print(self.arr_a)
-        arr_a = self.arr_camadas[-1].arr_unidades[-1].arr_a
+        arr_a = self.arr_camadas[-1].arr_unidades[0].arr_a
 
         return arr_a > 0.5
