@@ -1,0 +1,3 @@
+está escrito importanções ao invés de importações
+frase correta:
+"A seguir, apresentaremos as modificações que devem ser feitas por classe. Primeiramente, execute as importanções que usaremos na prática:"
