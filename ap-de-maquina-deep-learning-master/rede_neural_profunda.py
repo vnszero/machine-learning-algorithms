@@ -27,19 +27,15 @@ sigmoid = FuncaoAtivacao(lambda z:1/(1+np.power(math.e,-z)),
                       lambda a,z,y,arr_dz_w_prox: a - y
                       )
 
-relu = FuncaoAtivacao(lambda z: np.maximum(0,z),
-                      lambda a,z,y,arr_dz_w_prox: np.where(z>=0,arr_dz_w_prox,0),
-                      )
+relu = FuncaoAtivacao(lambda z:z*(z>=0),
+                      lambda a,z,y,arr_dz_w_prox:arr_dz_w_prox*(1*(z>=0)))
 
-
-
-leaky_relu = FuncaoAtivacao(lambda z: np.maximum(0.01*z,z),
-                      lambda a,z,y,arr_dz_w_prox: np.where(z>=0,arr_dz_w_prox,0.01 * arr_dz_w_prox),
-                      )
+leaky_relu = FuncaoAtivacao(lambda z:(0.01*z*(z<=0))+(z*(z>0)),
+                      lambda a,z,y,arr_dz_w_prox:arr_dz_w_prox*((0.01*(z<0))+(1*(z>=0))))
 
 
 tanh = FuncaoAtivacao(lambda z: np.tanh(z),
-                      lambda a,z,y,arr_dz_w_prox: 1 - np.power(np.tanh(z),2),                      )
+                      lambda a,z,y,arr_dz_w_prox: 1 - np.power(a,2))
 
 
 
