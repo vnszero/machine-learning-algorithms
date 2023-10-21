@@ -115,18 +115,40 @@ def fully_connected_model():
 
 def simple_cnn_model(add_dropout=False):
     # entrada
-    entrada = None
+    entrada = Input(shape=(150, 150, 3), name="Entrada")
 
     # demais camadas
+        # camada convolucional com 32 filtros 3x3
+    conv_2d_a = layers.Conv2D(32, (3, 3), activation='relu', name="Convolcao_1")(entrada)
+        # camada de max pooling com 2x2
+    max_polling_a = layers.MaxPooling2D((2, 2), name="Max_Pooling_1")(conv_2d_a)
+        # camada convolucional com 64 filtros 3x3
+    conv_2d_b = layers.Conv2D(64, (3, 3), activation='relu', name="Convolcao_2")(max_polling_a)
+        # camada de max pooling com 2x2
+    max_polling_b = layers.MaxPooling2D((2, 2), name="Max_Pooling_2")(conv_2d_b)
+        # camada convolucional com 128 filtros 3x3
+    conv_2d_c = layers.Conv2D(128, (3, 3), activation='relu', name="Convolcao_3")(max_polling_b)
+        # camada de max pooling com 2x2
+    max_polling_c = layers.MaxPooling2D((2, 2), name="Max_Pooling_3")(conv_2d_c)
+        # camada convolucional com 128 filtros 3x3
+    conv_2d_d = layers.Conv2D(128, (3, 3), activation='relu', name="Convolcao_4")(max_polling_c)
+        # camada de max pooling com 2x2
+    max_polling_d = layers.MaxPooling2D((2, 2), name="Max_Pooling_4")(conv_2d_d)
 
+    # camada de achatamento
     achatar = layers.Flatten()(max_polling_d)
+
+    # camada de dropout
     if (add_dropout):
-        achatar = None
-    fc_a = None
+        achatar = layers.Dropout(0.5)(achatar)
+    
+    # camada densa com 512 neuronios
+    fc_a = layers.Dense(512, activation='relu')(achatar)
+
     # camada de saida com 3 neuronios - cada um, respresntando uma classe
     # lembre de passar a cmada correta como saida
     # lembre-se que é uma classificação binária
-    saida = None
+    saida = layers.Dense(1, activation='sigmoid')(fc_a)
 
     # cria-se o modelo
     modelo = Model(inputs=entrada, outputs=saida)
