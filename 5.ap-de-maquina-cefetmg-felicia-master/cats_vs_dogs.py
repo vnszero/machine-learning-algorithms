@@ -4,6 +4,7 @@ from keras import Model
 from keras import layers
 from keras import Input
 from keras.optimizers import RMSprop
+from keras.losses import BinaryCrossentropy
 import matplotlib.pyplot as plt
 from keras.models import load_model
 import math
@@ -118,22 +119,30 @@ def simple_cnn_model(add_dropout=False):
     entrada = Input(shape=(150, 150, 3), name="Entrada")
 
     # demais camadas
-        # camada convolucional com 32 filtros 3x3
-    conv_2d_a = layers.Conv2D(32, (3, 3), activation='relu', name="Convolcao_1")(entrada)
-        # camada de max pooling com 2x2
-    max_polling_a = layers.MaxPooling2D((2, 2), name="Max_Pooling_1")(conv_2d_a)
-        # camada convolucional com 64 filtros 3x3
-    conv_2d_b = layers.Conv2D(64, (3, 3), activation='relu', name="Convolcao_2")(max_polling_a)
-        # camada de max pooling com 2x2
-    max_polling_b = layers.MaxPooling2D((2, 2), name="Max_Pooling_2")(conv_2d_b)
-        # camada convolucional com 128 filtros 3x3
-    conv_2d_c = layers.Conv2D(128, (3, 3), activation='relu', name="Convolcao_3")(max_polling_b)
-        # camada de max pooling com 2x2
-    max_polling_c = layers.MaxPooling2D((2, 2), name="Max_Pooling_3")(conv_2d_c)
-        # camada convolucional com 128 filtros 3x3
-    conv_2d_d = layers.Conv2D(128, (3, 3), activation='relu', name="Convolcao_4")(max_polling_c)
-        # camada de max pooling com 2x2
-    max_polling_d = layers.MaxPooling2D((2, 2), name="Max_Pooling_4")(conv_2d_d)
+    # camada convolucional com 32 filtros 3x3
+    conv_2d_a = layers.Conv2D(
+        32, (3, 3), activation='relu', name="Convolcao_1")(entrada)
+    # camada de max pooling com 2x2
+    max_polling_a = layers.MaxPooling2D(
+        (2, 2), name="Max_Pooling_1")(conv_2d_a)
+    # camada convolucional com 64 filtros 3x3
+    conv_2d_b = layers.Conv2D(
+        64, (3, 3), activation='relu', name="Convolcao_2")(max_polling_a)
+    # camada de max pooling com 2x2
+    max_polling_b = layers.MaxPooling2D(
+        (2, 2), name="Max_Pooling_2")(conv_2d_b)
+    # camada convolucional com 128 filtros 3x3
+    conv_2d_c = layers.Conv2D(
+        128, (3, 3), activation='relu', name="Convolcao_3")(max_polling_b)
+    # camada de max pooling com 2x2
+    max_polling_c = layers.MaxPooling2D(
+        (2, 2), name="Max_Pooling_3")(conv_2d_c)
+    # camada convolucional com 128 filtros 3x3
+    conv_2d_d = layers.Conv2D(
+        128, (3, 3), activation='relu', name="Convolcao_4")(max_polling_c)
+    # camada de max pooling com 2x2
+    max_polling_d = layers.MaxPooling2D(
+        (2, 2), name="Max_Pooling_4")(conv_2d_d)
 
     # camada de achatamento
     achatar = layers.Flatten()(max_polling_d)
@@ -141,7 +150,7 @@ def simple_cnn_model(add_dropout=False):
     # camada de dropout
     if (add_dropout):
         achatar = layers.Dropout(0.5)(achatar)
-    
+
     # camada densa com 512 neuronios
     fc_a = layers.Dense(512, activation='relu')(achatar)
 
@@ -172,11 +181,12 @@ def run_model(model, it_gen_train, it_gen_validation, param_training,
     if not load_if_exists or not os.path.isfile(str_file_to_save):
         # ao compilar use o optimizador em param_training.optimizer a perda é uma entropia cruzada binária
         # a métrica será sempre acurácia
-        model.compile(optimizer=None, loss=None, metrics=[None])
+        model.compile(optimizer=param_training.optimizer,
+                      loss=BinaryCrossentropy(), metrics=['accuracy'])
         # use o param_training para os parametros steps_per_epoch e epochs
-        history = model.fit_generator(None,
-                                      steps_per_epoch=None,
-                                      epochs=None,
+        history = model.fit_generator(it_gen_train,
+                                      steps_per_epoch=param_training.int_num_steps_per_epoch,
+                                      epochs=param_training.int_num_epochs,
                                       # podemos colocar a validação e ver a validação por passos. Não recomento, pois, isso demoraria muio
                                       # ..isso é bom apenas para analisarmos a curva de erro na validação e do treino. Mas, prefiro primeiramente
                                       # ..analisar o resultado da validação apenas no final do treino - usando predict_generator - e, se necessário,
@@ -185,11 +195,11 @@ def run_model(model, it_gen_train, it_gen_validation, param_training,
                                       # validation_steps=int_val_steps
                                       )
         # salve o modelo
-        None
+        model.save(str_file_to_save)
     else:
         # carrega o modelo
-        model = None
+        model = load_model(str_file_to_save)
     print("Avaliando validação....")
-    loss, acc = model.evaluate_generator(None,
-                                         steps=None)
-    return acc
+    loss, acc = model.evaluate_generator(
+        it_gen_validation, steps=int_val_steps)
+    return acc, loss
