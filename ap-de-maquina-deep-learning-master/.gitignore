@@ -1,7 +1,0 @@
-*.h5
-*.pyc
-*.npz
-*.idx
-.ipynb_checkpoints
-
-data
