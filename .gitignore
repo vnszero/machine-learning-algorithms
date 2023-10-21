@@ -6,4 +6,4 @@
 *.npz
 *.idx
 
-*data/*
+*/data/*
