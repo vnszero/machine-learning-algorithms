@@ -99,17 +99,17 @@ def fully_connected_model():
     entrada = Input(shape=(150, 150, 3), name="Entrada")
 
     # camadas a serem usadas
-    achatar = None
-    camada_um = None
-    camada_dois = None
-    camada_tres = None
+    achatar = layers.Flatten()(entrada)
+    camada_um = layers.Dense(500, activation='relu')(achatar)
+    camada_dois = layers.Dense(200, activation='relu')(camada_um)
+    camada_tres = layers.Dense(100, activation='relu')(camada_dois)
 
     # camada de saida
     # lembre-se que é uma classificação binária
-    saida = None
+    saida = layers.Dense(1, activation='sigmoid')(camada_tres)
 
     # cria-se o modelo
-    modelo = None
+    modelo = Model(inputs=entrada, outputs=saida)
     return modelo
 
 
